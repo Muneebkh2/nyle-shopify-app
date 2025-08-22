@@ -7,6 +7,20 @@ import {
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
 
+async function runAfterAuth({ session }) {
+  if (!session.accessToken) return;
+
+  console.log("Storing access token for shop:", session.shop);
+  await prisma.shop.upsert({
+    where: { shop: session.shop },
+    update: { accessToken: session.accessToken, active: true },
+    create: { shop: session.shop, accessToken: session.accessToken, active: true },
+  });
+
+  // Optionally register webhooks here
+  await shopify.registerWebhooks({ session });
+}
+
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
   apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
@@ -23,6 +37,9 @@ const shopify = shopifyApp({
   ...(process.env.SHOP_CUSTOM_DOMAIN
     ? { customShopDomains: [process.env.SHOP_CUSTOM_DOMAIN] }
     : {}),
+  hooks: {
+    afterAuth: runAfterAuth,
+  },
 });
 
 export default shopify;
