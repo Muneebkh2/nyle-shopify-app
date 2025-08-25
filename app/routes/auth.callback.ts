@@ -1,19 +1,3 @@
-// import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-// import shopify, { storeAccessToken } from "~/shopify.server";
-
-// export async function loader({ request }: LoaderFunctionArgs) {
-//   const { session } = await shopify.authenticate.admin(request);
-
-//   console.log("Authenticated session:", session);
-//   // Save access token in your Shop table
-//   await storeAccessToken(session.shop, session.accessToken);
-
-//   console.log('Redirecting...');
-//   // Redirect back to app root (Hello World page)
-//   return redirect("/app");
-// }
-
-
 // app/routes/auth.callback.tsx
 import { type LoaderFunctionArgs } from "@remix-run/node";
 import prisma from "~/db.server";

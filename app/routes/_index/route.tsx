@@ -1,39 +1,43 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Form, useLoaderData } from "@remix-run/react";
+import dotenv from "dotenv";
+dotenv.config();
 
 import { login } from "../../shopify.server";
-
 import styles from "./styles.module.css";
-import { c } from "node_modules/vite/dist/node/moduleRunnerTransport.d-DJ_mE5sf";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
+
+  // Generate redirect URL dynamically from request host
+  const isProduction = process.env.NODE_ENV === "production";
+  const redirectUrl = isProduction
+    ? process.env.REDIRECT_URL!
+    : `${url.protocol}//${url.host}/auth/callback`;
+
+  const API_KEY = process.env.SHOPIFY_API_KEY!;
+  const SCOPES = process.env.SCOPES!;
+  const shopDomain = "dev-namespace-3.myshopify.com";
+
+  const installUrl =
+    `https://${shopDomain}/admin/oauth/authorize` +
+    `?client_id=${API_KEY}` +
+    `&scope=${encodeURIComponent(SCOPES)}` +
+    `&redirect_uri=${encodeURIComponent(redirectUrl)}`;
 
   if (url.searchParams.get("shop")) {
     throw redirect(`/app?${url.searchParams.toString()}`);
   }
 
-  return { showForm: Boolean(login) };
+  return {
+    showForm: Boolean(login),
+    installUrl,
+  };
 };
 
-import crypto from "crypto";
-
-// Generate state
-const state = crypto.randomBytes(16).toString("hex");
-
-const API_KEY = process.env.SHOPIFY_API_KEY;
-const SCOPES = process.env.SCOPES;
-const REDIRECT_URL = process.env.REDIRECT_URL;
-const shopDomain = "dev-namespace-2.myshopify.com";
-
 export default function App() {
-  const { showForm } = useLoaderData<typeof loader>();
-  const installUrl = `https://${shopDomain}/admin/oauth/authorize` +
-  `?client_id=${API_KEY}` +
-  `&scope=${encodeURIComponent(SCOPES!)}` +
-  `&redirect_uri=${encodeURIComponent(REDIRECT_URL)}`;
-  //  + `&state=${state}`; // optional CSRF protection
+  const { showForm, installUrl } = useLoaderData<typeof loader>();
 
   return (
     <div className={styles.index}>
