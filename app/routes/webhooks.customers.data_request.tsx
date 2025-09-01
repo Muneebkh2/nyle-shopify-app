@@ -14,5 +14,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   //   await db.shop.deleteMany({ where: { shop } });
   // }
 
-  return new Response();
+  return new Response(
+    JSON.stringify({ success: true }),
+    {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    }
+  );
 };
