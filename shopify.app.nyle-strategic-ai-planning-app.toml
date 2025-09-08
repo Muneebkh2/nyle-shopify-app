@@ -4,7 +4,7 @@ client_id = "e6d753fd4b0ebd90acb6f898b4222918"
 name = "Nyle Strategic AI Planning APP"
 application_url = "https://application.nyle.ai/"
 embedded = true
-handle = "nyle-ai"
+handle = "nyle-strategic-ai-planning"
 
 [build]
 automatically_update_urls_on_dev = false
