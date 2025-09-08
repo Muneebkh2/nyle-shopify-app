@@ -9,5 +9,5 @@ export async function loader({ request }: LoaderArgs) {
     throw new Response("Invalid shop parameter", { status: 400 });
   }
 
-  return redirect(/auth?shop=${encodeURIComponent(shop)});
+  return redirect(`/auth?shop=${encodeURIComponent(shop)}`);
 }
