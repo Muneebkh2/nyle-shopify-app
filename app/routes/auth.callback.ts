@@ -32,8 +32,5 @@ export async function loader({ request }: LoaderFunctionArgs) {
       create: { shop, accessToken: data.access_token },
     });
   }
-
-  return new Response(JSON.stringify({ ok: true, shop, accessToken: data.access_token }), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return Response.redirect("/app", 302);
 }

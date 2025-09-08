@@ -1,0 +1,44 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "e6d753fd4b0ebd90acb6f898b4222918"
+name = "Nyle Strategic AI Planning APP"
+application_url = "https://application.nyle.ai/"
+embedded = true
+handle = "nyle-ai"
+
+[build]
+automatically_update_urls_on_dev = false
+include_config_on_deploy = true
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/customers/data_request"
+  compliance_topics = [ "customers/data_request" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/customers/redact"
+  compliance_topics = [ "customers/redact" ]
+
+  [[webhooks.subscriptions]]
+  uri = "/webhooks/shop/redact"
+  compliance_topics = [ "shop/redact" ]
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_assigned_fulfillment_orders,read_checkouts,read_customers,read_discounts,read_draft_orders,read_fulfillments,read_gift_cards,read_inventory,read_locales,read_locations,read_marketing_events,read_online_store_navigation,read_orders,read_price_rules,read_product_listings,read_products,read_reports,read_resource_feedbacks,read_script_tags,read_shipping,read_shopify_payments_disputes,read_shopify_payments_payouts,read_third_party_fulfillment_orders,read_translations,write_assigned_fulfillment_orders,write_content,write_customers,write_discounts,write_draft_orders,write_fulfillments,write_gift_cards,write_inventory,write_locations,write_marketing_events,write_orders,write_price_rules,write_products,write_reports,write_resource_feedbacks,write_shipping,write_third_party_fulfillment_orders,write_translations"
+
+[auth]
+redirect_urls = [
+  "https://application.nyle.ai/auth/callback",
+  "https://application.nyle.ai/auth/shopify/callback",
+  "https://application.nyle.ai/api/auth/callback"
+]
+
+[pos]
+embedded = false
